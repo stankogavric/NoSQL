@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import mysql_functions
 
 
 class Ui_Form(object):
@@ -32,9 +33,15 @@ class Ui_Form(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setObjectName("pushButton_2")
+
+        self.pushButton_2.clicked.connect(self.create_database)
+
         self.horizontalLayout_2.addWidget(self.pushButton_2)
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setObjectName("pushButton")
+
+        self.pushButton.clicked.connect(self.db_connect)
+
         self.horizontalLayout_2.addWidget(self.pushButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.message = QtWidgets.QLabel(Form)
@@ -51,6 +58,22 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "Enter Database Name:"))
         self.pushButton_2.setText(_translate("Form", "Database Creation"))
         self.pushButton.setText(_translate("Form", "Database Connection"))
+
+    def db_connect(self):
+        try:
+            mysql_functions.connection("localhost", "root", "root")
+            self.message.setText("There is connection")
+        except Exception as e:
+            self.message.setText("Error In connection")
+
+    def create_database(self):
+        try:
+            db_name = self.inputdbname.text()
+            mysql_functions.create_database(db_name)
+            self.message.setText("Database {} Created".format(db_name))
+        except Exception as e:
+            print(e)
+            self.message.setText("Database creation failed")
 
 
 if __name__ == "__main__":
