@@ -19,7 +19,6 @@ def connection(host, user, password):
         print(err)
         raise
 
-
 def create_database(database_name):
     current_cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(database_name))
 
@@ -27,3 +26,6 @@ def create_database(database_name):
 def show_databases():
     current_cursor.execute("SHOW DATABASES")
     return current_cursor
+
+def drop_database(database_name):
+    current_cursor.execute("DROP DATABASE IF EXISTS {}".format(database_name))
