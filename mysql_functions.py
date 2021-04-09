@@ -22,10 +22,38 @@ def connection(host, user, password):
 def create_database(database_name):
     current_cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(database_name))
 
-
 def show_databases():
     current_cursor.execute("SHOW DATABASES")
     return current_cursor
 
 def drop_database(database_name):
     current_cursor.execute("DROP DATABASE IF EXISTS {}".format(database_name))
+
+def show_tables(database_name):
+    current_cursor.execute("SHOW TABLES FROM {}".format(database_name))
+    return current_cursor
+
+def show_columns(database_name, table_name):
+    use_database(database_name)
+    current_cursor.execute("SHOW COLUMNS FROM {}".format(table_name))
+    return current_cursor
+
+def show_table(database_name, table_name):
+    use_database(database_name)
+    current_cursor.execute("SELECT * FROM {}".format(table_name))
+    return current_cursor.fetchall()
+
+def use_database(database_name):
+    current_cursor.execute("USE {}".format(database_name))
+
+def delete(database_name, table_name, columns):
+    use_database(database_name)
+    sql = "DELETE FROM " + table_name + " WHERE "
+    table_columns = [column for column in show_columns(database_name, table_name)]
+    for index, column in enumerate(columns):
+        if index > 0 and index < len(columns):
+            sql += " AND "
+        sql+=table_columns[index][0] + " = %s"
+    val = tuple(columns)
+    current_cursor.execute(sql, val)
+    current_connection.commit()
