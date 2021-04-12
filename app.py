@@ -111,6 +111,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.addWidget(self.insertButton)
         self.updateSelectedButton = QtWidgets.QPushButton(self.tab_2)
         self.updateSelectedButton.setObjectName("updateSelectedButton")
+
+        self.updateSelectedButton.clicked.connect(self.update_record)
+
         self.horizontalLayout_6.addWidget(self.updateSelectedButton)
         self.deleteSelectedButton = QtWidgets.QPushButton(self.tab_2)
         self.deleteSelectedButton.setObjectName("deleteSelectedButton")
@@ -124,6 +127,14 @@ class Ui_MainWindow(object):
         self.getAllButton.clicked.connect(self.load_data)
 
         self.horizontalLayout_6.addWidget(self.getAllButton)
+
+        self.searchButton = QtWidgets.QPushButton(self.tab_2)
+        self.searchButton.setObjectName("searchButton")
+        
+        self.searchButton.clicked.connect(self.search)
+
+        self.horizontalLayout_6.addWidget(self.searchButton)
+
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
         self.tableWidget = QtWidgets.QTableWidget(self.tab_2)
         self.tableWidget.setObjectName("tableWidget")
@@ -166,6 +177,7 @@ class Ui_MainWindow(object):
         self.updateSelectedButton.setText(_translate("MainWindow", "Update Selected"))
         self.deleteSelectedButton.setText(_translate("MainWindow", "Delete Selected"))
         self.getAllButton.setText(_translate("MainWindow", "Get All"))
+        self.searchButton.setText(_translate("MainWindow", "Search"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Data"))
 
     def db_connect(self, config):
@@ -232,10 +244,11 @@ class Ui_MainWindow(object):
         selected_db = self.databaseSelectionData.currentText()
         self.collectionSelectionData.addItems([collection_name[0] for collection_name in mysql_functions.show_tables(selected_db)])
 
-    def load_data(self):
+    def load_data(self, data=None):
         db_name = self.databaseSelectionData.currentText()
         table_name = self.collectionSelectionData.currentText()
-        data = mysql_functions.show_table(db_name, table_name)
+        if data is None or data == False:
+            data = mysql_functions.show_table(db_name, table_name)
         columns = [column[0] for column in mysql_functions.show_columns(db_name, table_name)]
 
         num_rows = len(data)
@@ -266,6 +279,27 @@ class Ui_MainWindow(object):
         table_name = self.collectionSelectionData.currentText()
         dlg = Dialog(db_name, table_name, None, "insert")
         dlg.exec()
+
+    def update_record(self):
+        db_name = self.databaseSelectionData.currentText()
+        table_name = self.collectionSelectionData.currentText()
+
+        data = mysql_functions.show_table(db_name, table_name)
+
+        selected_indexes = self.tableWidget.selectedIndexes()
+        for s in selected_indexes:
+            dlg = Dialog(db_name, table_name, data[s.row()], "update")
+            dlg.exec()
+
+        self.load_data()
+
+    def search(self):
+        db_name = self.databaseSelectionData.currentText()
+        table_name = self.collectionSelectionData.currentText()
+        dlg = Dialog(db_name, table_name, None, "search")
+        closed = dlg.exec()
+        if not closed:
+            self.load_data(dlg.get_search_results())
 
     
 

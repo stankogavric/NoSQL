@@ -57,3 +57,65 @@ def delete(database_name, table_name, columns):
     val = tuple(columns)
     current_cursor.execute(sql, val)
     current_connection.commit()
+
+def insert(database_name, table_name, columns, values):
+    use_database(database_name)
+    sql = "INSERT INTO " + table_name + "("
+    first = False
+    for index, column in enumerate(columns):
+        if values[index].strip() == "":
+            continue
+        if first:
+            sql += ", "
+        sql += column
+        first = True
+    sql += ") VALUES ("
+    first = False
+    for index, v in enumerate(values):
+        if v.strip() == "":
+            continue
+        if first:
+            sql += ", "
+        sql += "%s"
+        first = True
+    sql += ")"
+    values = tuple([v for v in values if v != ""])
+
+    current_cursor.execute(sql, values)
+    current_connection.commit()
+
+def update(database_name, table_name, columns, values):
+    use_database(database_name)
+    sql = "UPDATE " + table_name + " SET "
+    sql_values = []
+    for index, column in enumerate(columns):
+        if index > 0 and index < len(columns):
+            sql += ", "
+        sql += column + " = " + "%s"
+        sql_values.append(str(values[index]))
+    sql += " WHERE "
+    columns_data = [column for column in show_columns(database_name, table_name)]
+    first = False
+    for index, column in enumerate(columns_data):
+        if column[3] == "PRI":
+            if first and index > 0 and index < len(columns_data):
+                sql += ", "
+            sql += columns[index] + " = " + "%s"
+            first = True
+            sql_values.append(str(values[index]))
+    current_cursor.execute(sql, sql_values)
+    current_connection.commit()
+
+def search(database_name, table_name, columns, values):
+    use_database(database_name)
+    sql = "SELECT * FROM " + table_name + " WHERE "
+    sql_values = []
+    for index, column in enumerate(columns):
+        if values[index].strip() == "":
+            continue
+        if index > 0 and index < len(columns):
+            sql += " AND "
+        sql += column + " = " + "%s"
+        sql_values.append(str(values[index]))
+    current_cursor.execute(sql, sql_values)
+    return current_cursor
