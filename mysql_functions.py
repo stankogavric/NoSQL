@@ -20,7 +20,7 @@ def connection(host, user, password):
         raise
 
 def create_database(database_name):
-    current_cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(database_name))
+    current_cursor.execute("CREATE DATABASE IF NOT EXISTS `{}`".format(database_name))
 
 def show_databases():
     current_cursor.execute("SHOW DATABASES")
