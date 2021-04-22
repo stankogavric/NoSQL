@@ -1,0 +1,23 @@
+[
+    {
+        "name":"Marko",
+        "surname":"Markovic",
+        "gpa":10,
+        "studyProgram":"SII",
+        "note":"Odličan student"
+    },
+    {
+        "name":"Petar",
+        "surname":"Petrovic",
+        "gpa":9.5,
+        "studyProgram":"SII",
+        "note":""
+    },
+    {
+        "name":"Janko",
+        "surname":"Jankovic",
+        "gpa":8.5,
+        "studyProgram":"IT",
+        "note":"Bez prisustva"
+    }
+]
