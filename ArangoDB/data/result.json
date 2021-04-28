@@ -1,0 +1,36 @@
+{'visited': {'vertices': [
+            {'_key': 'ana', '_id': 'Female/ana', '_rev': '_cPdWUpy---', 'name': 'Ana'
+            },
+            {'_key': 'marko', '_id': 'Male/marko', '_rev': '_cPdWUqG---', 'name': 'Marko'
+            },
+            {'_key': 'jana', '_id': 'Female/jana', '_rev': '_cPdWUp6---', 'name': 'Jana'
+            }
+        ], 'paths': [
+            {'edges': [], 'vertices': [
+                    {'_key': 'ana', '_id': 'Female/ana', '_rev': '_cPdWUpy---', 'name': 'Ana'
+                    }
+                ]
+            },
+            {'edges': [
+                    {'_key': 'anaAndMarko', '_id': 'Relation/anaAndMarko', '_from': 'Female/ana', '_to': 'Male/marko', '_rev': '_cPdWUqa---', 'type': 'married'
+                    }
+                ], 'vertices': [
+                    {'_key': 'ana', '_id': 'Female/ana', '_rev': '_cPdWUpy---', 'name': 'Ana'
+                    },
+                    {'_key': 'marko', '_id': 'Male/marko', '_rev': '_cPdWUqG---', 'name': 'Marko'
+                    }
+                ]
+            },
+            {'edges': [
+                    {'_key': 'anaAndJana', '_id': 'Relation/anaAndJana', '_from': 'Female/ana', '_to': 'Female/jana', '_rev': '_cPdWUrC---', 'type': 'friend'
+                    }
+                ], 'vertices': [
+                    {'_key': 'ana', '_id': 'Female/ana', '_rev': '_cPdWUpy---', 'name': 'Ana'
+                    },
+                    {'_key': 'jana', '_id': 'Female/jana', '_rev': '_cPdWUp6---', 'name': 'Jana'
+                    }
+                ]
+            }
+        ]
+    }
+}
